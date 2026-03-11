@@ -10,15 +10,13 @@ async function startServer() {
   const app = express();
   const server = createServer(app);
 
-  // Serve static files from dist/public in production
-  const staticPath =
-    process.env.NODE_ENV === "production"
-      ? path.resolve(__dirname, "public")
-      : path.resolve(__dirname, "..", "dist", "public");
+  // After build, this file is bundled to dist/index.js and the client lives in dist/public.
+  // __dirname will be "<project-root>/dist", so staticPath is always "<dist>/public".
+  const staticPath = path.resolve(__dirname, "public");
 
   app.use(express.static(staticPath));
 
-  // Handle client-side routing - serve index.html for all routes
+  // SPA fallback - serve index.html for all routes
   app.get("*", (_req, res) => {
     res.sendFile(path.join(staticPath, "index.html"));
   });
