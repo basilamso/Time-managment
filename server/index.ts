@@ -23,11 +23,13 @@ async function startServer() {
     res.sendFile(path.join(staticPath, "index.html"));
   });
 
-  const port = process.env.PORT || 3000;
+  const port = Number(process.env.PORT) || 3000;
 
   server.listen(port, () => {
     console.log(`Server running on http://localhost:${port}/`);
   });
 }
 
-startServer().catch(console.error);
+startServer().catch((error) => {
+  console.error("Failed to start server:", error);
+});
